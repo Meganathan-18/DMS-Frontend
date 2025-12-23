@@ -1,0 +1,150 @@
+.trash-container {
+  padding: 24px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.trash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.trash-header h2 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.trash-header p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.trash-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.trash-search {
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  width: 220px;
+}
+
+.trash-search:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+.trash-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trash-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.trash-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+.trash-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.trash-left h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.trash-left span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-restore {
+  background: #22c55e;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.trash-empty {
+  text-align: center;
+  padding: 60px;
+  font-size: 18px;
+  color: #64748b;
+}
+
+.trash-loading {
+  padding: 40px;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Badge Base */
+.badge {
+  margin-left: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Colors */
+.badge-danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.badge-warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-safe {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.trash-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #64748b;
+}
