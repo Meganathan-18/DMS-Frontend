@@ -12,18 +12,25 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+
+
 api.interceptors.response.use(
-  res => res,
-  err => {
-    if (
-      err.response?.status === 403 &&
-      err.response?.data === "User is blocked by admin"
-    ) {
+  response => response,
+  error => {
+    const status = error.response?.status;
+    const message = error.response?.data;
+
+    // 🔐 ONLY logout if backend EXPLICITLY says blocked
+    if (status === 403 && message === "User is blocked by admin") {
       alert("Your account is blocked by admin");
       localStorage.clear();
       window.location.href = "/login";
+      return;
     }
-    return Promise.reject(err);
+
+    // ❗ For all other 403s → DO NOT LOGOUT
+    return Promise.reject(error);
   }
 );
+
 export default api;

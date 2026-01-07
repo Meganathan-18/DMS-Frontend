@@ -1,0 +1,75 @@
+/* Header */
+.folder-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Create button */
+.create-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  background: #4f46e5;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.create-btn:hover {
+  background: #4338ca;
+}
+
+/* Folder list */
+.folder-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Folder row (uses row-card from Documents.css) */
+.folder-row {
+  cursor: default;
+}
+
+/* Left section */
+.folder-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.folder-icon {
+  font-size: 20px;
+}
+
+/* Actions */
+.folder-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Icon buttons */
+.icon-btn {
+  border: none;
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.icon-btn:hover {
+  background: #e5e7eb;
+}
+
+.icon-btn.danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.icon-btn.danger:hover {
+  background: #fecaca;
+}

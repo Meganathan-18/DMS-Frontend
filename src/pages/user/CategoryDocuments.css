@@ -1,0 +1,131 @@
+/* Container */
+.cat-container {
+  max-width: 1000px;
+  padding: 26px;
+  background: #f8fafc;
+  border-radius: 14px;
+  font-family: "Inter", sans-serif;
+}
+
+/* Title */
+.cat-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 18px;
+}
+
+/* Toolbar */
+.cat-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 22px;
+  background: white;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.cat-toolbar input {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+}
+
+.cat-toolbar input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.cat-toolbar button {
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.cat-toolbar button:hover {
+  background: #1d4ed8;
+}
+
+.cat-toolbar button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Table */
+.cat-table {
+  background: white;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+/* Header */
+.cat-header {
+  display: grid;
+  grid-template-columns: 1fr 140px 140px;
+  padding: 14px 18px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Rows */
+.cat-row {
+  display: grid;
+  grid-template-columns: 1fr 140px 140px;
+  align-items: center;
+  padding: 14px 18px;
+  border-top: 1px solid #f1f5f9;
+  transition: background 0.15s ease;
+}
+
+.cat-row:hover {
+  background: #f8fafc;
+}
+
+/* Document name */
+.doc-name {
+  font-weight: 500;
+  color: #0f172a;
+}
+
+/* Version badge */
+.doc-version {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 13px;
+  border-radius: 999px;
+  background: #e0e7ff;
+  color: #1e3a8a;
+  font-weight: 600;
+  width: fit-content;
+}
+
+/* Action link */
+.cat-link {
+  font-size: 13px;
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.cat-link:hover {
+  text-decoration: underline;
+}
+
+/* Empty state */
+.cat-empty {
+  padding: 40px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+}

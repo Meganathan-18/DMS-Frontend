@@ -4,58 +4,57 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   return (
-    <div style={styles.container}>
-      {/* 👋 Header */}
-      <h2 style={styles.heading}>Welcome to Your Dashboard</h2>
-      <p style={styles.subtext}>
-        Manage, version, and organize your documents securely.
+    <div style={styles.page}>
+      {/* ===== Header ===== */}
+      <h1 style={styles.title}>Welcome Back !!!</h1>
+      <p style={styles.subtitle}>
+        Enterprise Document Management System at your fingertips.
       </p>
 
-      {/* 📊 Quick Stats */}
-      <div style={styles.stats}>
-        <div style={styles.card}>
-          <div style={styles.value}>📄</div>
-          <div style={styles.label}>My Documents</div>
+      {/* ===== Cards ===== */}
+      <div style={styles.cardGrid}>
+        <div style={styles.glassCard}>
+          <div style={{ fontSize: 32 }}>📁</div>
+          <p>My Documents</p>
         </div>
 
-        <div style={styles.card}>
-          <div style={styles.value}>🧾</div>
-          <div style={styles.label}>Document Versions</div>
+        <div style={styles.glassCard}>
+          <div style={{ fontSize: 32 }}>🕒</div>
+          <p>Document Versions</p>
         </div>
 
-        <div style={styles.card}>
-          <div style={styles.value}>🗑</div>
-          <div style={styles.label}>Trash</div>
+        <div style={styles.glassCard}>
+          <div style={{ fontSize: 32 }}>📊</div>
+          <p>Storage Analytics</p>
         </div>
       </div>
 
-      {/* ⚡ Quick Actions */}
+      {/* ===== Actions ===== */}
       <div style={styles.actions}>
         <button
-          style={styles.actionBtn}
+          style={{ ...styles.btn, background: "#3b82f6" }}
           onClick={() => navigate("/user/upload")}
         >
           ⬆ Upload Document
         </button>
 
         <button
-          style={styles.actionBtn}
-          onClick={() => navigate("/user/documents")}
+          style={{ ...styles.btn, background: "#22c55e" }}
         >
-          📁 My Documents
+          ➕ Create New Folder
         </button>
 
         <button
-          style={styles.actionBtn}
+          style={{ ...styles.btn, background: "#f87e26ff" }}
           onClick={() => navigate("/user/trash")}
         >
-          🗑 Trash
+          🗑 View Trash Bin
         </button>
       </div>
 
-      {/* ℹ About */}
-      <div style={styles.about}>
-        <h3>About This System</h3>
+      {/* ===== System Overview ===== */}
+      <div style={styles.overview}>
+        <h3>System Overview</h3>
         <p>
           This Document Management System allows you to upload documents,
           maintain version history, restore deleted files, and securely manage
@@ -68,72 +67,71 @@ const Dashboard = () => {
 
 export default Dashboard;
 
-/* 🎨 Styles */
+/* ================= STYLES ================= */
+
 const styles = {
-  container: {
-    padding: "24px",
-    maxWidth: "900px",
-    margin: "0 auto",
+  page: {
+    minHeight: "100vh",
+    padding: "48px",
+    color: "#fff",
+    background:
+      "radial-gradient(circle at top, #1e293b, #020617)",
+    fontFamily: "Inter, system-ui, sans-serif",
   },
 
-  heading: {
-    fontSize: "26px",
-    fontWeight: "600",
+  title: {
+    fontSize: "34px",
+    fontWeight: "700",
     marginBottom: "6px",
   },
 
-  subtext: {
-    color: "#64748b",
-    marginBottom: "24px",
+  subtitle: {
+    color: "#cbd5f5",
+    marginBottom: "36px",
   },
 
-  stats: {
+  cardGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-    gap: "16px",
-    marginBottom: "28px",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "20px",
+    marginBottom: "32px",
   },
 
-  card: {
-    background: "#fff",
-    borderRadius: "14px",
-    padding: "18px",
+  glassCard: {
+    background: "rgba(255,255,255,0.08)",
+    backdropFilter: "blur(14px)",
+    borderRadius: "16px",
+    padding: "28px",
     textAlign: "center",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-    border: "1px solid #e5e7eb",
-  },
-
-  value: {
-    fontSize: "28px",
-    marginBottom: "8px",
-  },
-
-  label: {
-    fontSize: "14px",
-    color: "#475569",
+    border: "1px solid rgba(255,255,255,0.15)",
+    boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+    cursor: "pointer",
   },
 
   actions: {
     display: "flex",
-    gap: "12px",
+    gap: "14px",
     flexWrap: "wrap",
-    marginBottom: "32px",
+    marginBottom: "40px",
   },
 
-  actionBtn: {
-    padding: "12px 18px",
+  btn: {
+    padding: "12px 20px",
     borderRadius: "10px",
-    border: "1px solid #e5e7eb",
-    background: "#4f46e5",
+    border: "none",
     color: "#fff",
     fontSize: "14px",
+    fontWeight: "500",
     cursor: "pointer",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
   },
 
-  about: {
-    background: "#f8fafc",
-    padding: "20px",
-    borderRadius: "14px",
-    border: "1px solid #e5e7eb",
+  overview: {
+    background: "rgba(255,255,255,0.08)",
+    backdropFilter: "blur(14px)",
+    padding: "26px",
+    borderRadius: "16px",
+    border: "1px solid rgba(255,255,255,0.15)",
+    maxWidth: "900px",
   },
 };

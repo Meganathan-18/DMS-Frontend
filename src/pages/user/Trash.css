@@ -1,150 +1,355 @@
+/* ================= ROOT ================= */
+
 .trash-container {
-  padding: 24px;
-  max-width: 1000px;
+  padding: 40px;
+  max-width: 1200px;
   margin: auto;
+  color: #124cd3;
+  background-color: #f8fafc;
+  min-height: 100vh;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #303c51, #bebfc2);
 }
+
+/* ================= HEADER ================= */
 
 .trash-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 36px;
 }
 
-.trash-header h2 {
+.header-left h1 {
+  font-size: 32px;
   margin: 0;
-  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
 }
 
-.trash-header p {
-  margin: 4px 0 0;
+.header-left p {
+  color: #ffffff;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+/* ================= SEARCH ================= */
+
+.search-box {
+  position: relative;
+}
+
+.search-box input {
+  padding: 10px 14px 10px 38px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  width: 300px;
+  background: #ffffff;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   color: #64748b;
   font-size: 14px;
 }
 
-.trash-actions {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
+/* ================= HEADER ACTIONS ================= */
 
-.trash-search {
-  padding: 9px 14px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  font-size: 14px;
-  width: 220px;
-}
-
-.trash-search:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
-}
-
-.trash-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.trash-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 16px 18px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.trash-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
-}
-
-.trash-left {
+.header-actions {
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
-.trash-left h4 {
-  margin: 0;
-  font-size: 16px;
+.select-all-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #edeff1;
 }
 
-.trash-left span {
-  font-size: 12px;
-  color: #64748b;
-}
+/* ================= BUTTONS ================= */
 
-.btn-danger {
-  background: #ef4444;
-  color: #fff;
+.btn-empty {
+  background-color: #dc2626;
+  color: #ffffff;
   border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
 }
 
-.btn-danger:disabled {
+.btn-empty:hover {
+  background-color: #b91c1c;
+}
+
+.btn-empty:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.btn-restore {
-  background: #22c55e;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
+/* ================= GRID ================= */
+
+.trash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+/* ================= CARD ================= */
+
+.trash-card {
+  position: relative;
+  background: #e31010;
+  color: #0f172a;
+  border-radius: 20px;
+  padding: 28px 22px;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.trash-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+/* Disable old gradient classes */
+.card-blue,
+.card-orange {
+  background: #ffffff;
+}
+
+/* ================= CHECKBOX ================= */
+
+.card-checkbox {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 16px;
+  height: 16px;
   cursor: pointer;
+  accent-color: #2563eb;
 }
 
-.trash-empty {
-  text-align: center;
-  padding: 60px;
-  font-size: 18px;
-  color: #64748b;
+/* ================= ICON ================= */
+
+.file-icon-wrapper {
+  font-size: 52px;
+  margin-bottom: 10px;
+  color: #2563eb;
 }
 
-.trash-loading {
-  padding: 40px;
-  text-align: center;
+/* ================= TITLE ================= */
+
+.trash-card h3 {
   font-size: 16px;
+  font-weight: 600;
+  margin: 10px 0 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #0f172a;
 }
 
-/* Badge Base */
-.badge {
-  margin-left: 10px;
-  padding: 4px 10px;
+/* ================= META ================= */
+
+.item-date {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 14px;
+}
+
+/* ================= BADGE ================= */
+
+.days-left-pill {
+  display: inline-block;
+  /* background: #22a3d6; */
+  color: #eb8705;
+  border: 1px solid #e2e8f0;
+  padding: 4px 14px;
   border-radius: 999px;
   font-size: 11px;
   font-weight: 600;
+  margin-bottom: 18px;
 }
 
-/* Colors */
-.badge-danger {
-  background: #fee2e2;
-  color: #b91c1c;
+/* ================= RESTORE BUTTON ================= */
+
+.btn-card-restore {
+  background: #ffffff;
+  color: #dc2626;
+  border: 1px solid #e2e8f0;
+  width: 80%;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.badge-warning {
-  background: #fef3c7;
-  color: #92400e;
+.btn-card-restore:hover {
+  background: #e0f2fe;
 }
 
-.badge-safe {
-  background: #dcfce7;
-  color: #166534;
-}
+/* ================= STATES ================= */
 
-.trash-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
+.trash-loading,
+.trash-empty {
+  text-align: center;
+  padding: 100px;
   color: #64748b;
+  font-size: 16px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+  .trash-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .header-right {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
+  .trash-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+/* ================= LIVE TRASH BACKGROUND ================= */
+
+.trash-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background layer */
+.trash-live-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Floating elements */
+.trash-live-bg span {
+  position: absolute;
+  top: -120px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(220,38,38,0.45),
+    rgba(220,38,38,0.18)
+  );
+  filter: blur(2px);
+  animation: trashSnow linear infinite;
+}
+
+/* Variations */
+.trash-live-bg span:nth-child(1) {
+  left: 6%;
+  width: 60px;
+  height: 60px;
+  animation-duration: 12s;
+}
+
+.trash-live-bg span:nth-child(2) {
+  left: 20%;
+  width: 120px;
+  height: 120px;
+  animation-duration: 20s;
+}
+
+.trash-live-bg span:nth-child(3) {
+  left: 38%;
+  width: 90px;
+  height: 90px;
+  animation-duration: 16s;
+}
+
+.trash-live-bg span:nth-child(4) {
+  left: 56%;
+  width: 150px;
+  height: 150px;
+  animation-duration: 26s;
+}
+
+.trash-live-bg span:nth-child(5) {
+  left: 74%;
+  width: 70px;
+  height: 70px;
+  animation-duration: 14s;
+}
+
+.trash-live-bg span:nth-child(6) {
+  left: 88%;
+  width: 50px;
+  height: 50px;
+  animation-duration: 10s;
+}
+
+/* Animation */
+@keyframes trashSnow {
+  0% {
+    transform: translateY(-20vh) translateX(0) scale(0.9);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(120vh) translateX(40px) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* Ensure existing content stays above background */
+.trash-header,
+.trash-grid,
+.trash-empty,
+.trash-loading {
+  position: relative;
+  z-index: 1;
+}
+
+.trash-live-bg span:nth-child(1) { left: 8%; width: 90px; height: 90px; animation-duration: 18s; }
+.trash-live-bg span:nth-child(2) { left: 30%; width: 160px; height: 160px; animation-duration: 26s; }
+.trash-live-bg span:nth-child(3) { left: 50%; width: 120px; height: 120px; animation-duration: 22s; }
+.trash-live-bg span:nth-child(4) { left: 70%; width: 180px; height: 180px; animation-duration: 30s; }
+.trash-live-bg span:nth-child(5) { left: 88%; width: 70px; height: 70px; animation-duration: 16s; }
+@keyframes trashFloat {
+  0% { transform: translateY(0) translateX(0) scale(0.9); opacity: 0; }
+  20% { opacity: 0.8; }
+  100% { transform: translateY(-130vh) translateX(80px) scale(1.2); opacity: 0; }
 }

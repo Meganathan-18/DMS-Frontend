@@ -1,7 +1,74 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import api from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+
+/* ================= SNOWFALL UI ================= */
+
+const Snowfall = () => {
+  const snowflakes = useMemo(
+    () =>
+      Array.from({ length: 40 }).map(() => ({
+        left: Math.random() * 100 + "%",
+        duration: 6 + Math.random() * 6 + "s",
+        delay: Math.random() * 5 + "s",
+        size: 8 + Math.random() * 12 + "px",
+      })),
+    []
+  );
+
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+      .snow-container {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 9999;
+      }
+
+      .snowflake {
+        position: absolute;
+        top: -10px;
+        color: white;
+        opacity: 0.85;
+        animation-name: fall;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
+
+      @keyframes fall {
+        to {
+          transform: translateY(110vh);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
+
+  return (
+    <div className="snow-container">
+      {snowflakes.map((s, i) => (
+        <span
+          key={i}
+          className="snowflake"
+          style={{
+            left: s.left,
+            animationDuration: s.duration,
+            animationDelay: s.delay,
+            fontSize: s.size,
+          }}
+        >
+          ❄
+        </span>
+      ))}
+    </div>
+  );
+};
+
+/* ================= LOGIN ================= */
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -20,13 +87,10 @@ const Login = () => {
 
     try {
       const res = await api.post("/auth/login", { username, password });
-
       login(res.data.token, res.data.role);
       navigate(res.data.role === "ROLE_ADMIN" ? "/admin" : "/user");
     } catch (err) {
-      if (err.response?.status === 403) {
-        setError("❌ Invalid username or password");
-      } else if (err.response?.status === 401) {
+      if (err.response?.status === 403 || err.response?.status === 401) {
         setError("❌ Invalid username or password");
       } else {
         setError("⚠️ Something went wrong. Please try again.");
@@ -38,6 +102,9 @@ const Login = () => {
 
   return (
     <div style={styles.page}>
+      {/* ❄ SNOWFALL OVERLAY */}
+      <Snowfall />
+
       {/* LEFT BRAND PANEL */}
       <div style={styles.left}>
         <h1 style={styles.brand}>Secure</h1>
@@ -101,7 +168,6 @@ const styles = {
     fontFamily: "Inter, sans-serif",
   },
 
-  /* LEFT PANEL */
   left: {
     flex: 1,
     background: "linear-gradient(180deg, #0f2a33, #1b3f4a)",
@@ -111,17 +177,18 @@ const styles = {
     justifyContent: "center",
     paddingLeft: "80px",
   },
+
   brand: {
     fontSize: "42px",
     fontWeight: "700",
     marginBottom: "10px",
   },
+
   tagline: {
     fontSize: "16px",
     opacity: 0.85,
   },
 
-  /* RIGHT PANEL */
   right: {
     flex: 1,
     background: "#f8fafc",

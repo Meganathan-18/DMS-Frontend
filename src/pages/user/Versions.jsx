@@ -5,6 +5,7 @@ import {
   uploadNewVersion,
   downloadDocument,
 } from "../../api/documentService";
+import "./Versions.css";
 
 const Versions = () => {
   const { documentId } = useParams();
@@ -31,7 +32,6 @@ const Versions = () => {
     await uploadNewVersion(documentId, file);
     setFile(null);
 
-    // reload versions
     const res = await getVersions(documentId);
     setVersions(res.data);
   };
@@ -51,53 +51,48 @@ const Versions = () => {
   if (loading) return <p>Loading files...</p>;
 
   return (
-    <div style={styles.container}>
-      <h2>📁 Files</h2>
+  <div className="versions-container">
+    <h2 className="versions-title">Document Versions</h2>
 
-      <div style={styles.upload}>
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-        <button onClick={handleUpload}>Upload New Version</button>
-      </div>
-
-      {versions.length === 0 ? (
-        <p>No files found</p>
-      ) : (
-        <div style={styles.list}>
-          {versions.map((v) => (
-            <div key={v.id} style={styles.fileRow}>
-              <div>📄 <strong>Version {v.versionNumber}</strong></div>
-              <button onClick={() => handleDownload(v.id)}>⬇ Download</button>
-            </div>
-          ))}
-        </div>
-      )}
+    {/* Upload bar */}
+    <div className="versions-upload">
+      <input
+        type="file"
+        onChange={(e) => setFile(e.target.files[0])}
+      />
+      <button onClick={handleUpload}>Upload new version</button>
     </div>
-  );
+
+    {versions.length === 0 ? (
+      <div className="versions-empty">No versions found</div>
+    ) : (
+      <div className="versions-table">
+        <div className="versions-header">
+          <span>Version</span>
+          <span>Uploaded At</span>
+          <span></span>
+        </div>
+
+        {versions.map((v) => (
+          <div key={v.id} className="versions-row">
+            <span className="ver-no">v{v.versionNumber}</span>
+
+            <span className="ver-date">
+              {new Date(v.uploadedAt).toLocaleString()}
+            </span>
+
+            <button
+              className="download-btn"
+              onClick={() => handleDownload(v.id)}
+            >
+              Download
+            </button>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+);
 };
 
 export default Versions;
-const styles = {
-  container: {
-    padding: "20px",
-    maxWidth: "800px",
-  },
-  upload: {
-    marginBottom: "20px",
-    display: "flex",
-    gap: "10px",
-  },
-  list: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "12px",
-  },
-  fileRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "12px 16px",
-    borderRadius: "8px",
-    background: "#f8fafc",
-    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-  },
-};

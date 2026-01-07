@@ -1,0 +1,57 @@
+/* ❄ SHARED WITH ME – SNOW BUBBLES */
+
+.shared-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #3d4a60, #bebfc2);
+}
+
+/* Background layer */
+.shared-bubble-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Falling bubbles */
+.shared-bubble-bg span {
+  position: absolute;
+  top: -120px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(14,165,233,0.45),
+    rgba(14,165,233,0.15)
+  );
+  filter: blur(1px);
+  animation: sharedSnow linear infinite;
+}
+
+/* Sizes & speeds */
+.shared-bubble-bg span:nth-child(1)  { left: 6%;  width: 50px; height: 50px; animation-duration: 10s; }
+.shared-bubble-bg span:nth-child(2)  { left: 15%; width: 90px; height: 90px; animation-duration: 14s; }
+.shared-bubble-bg span:nth-child(3)  { left: 25%; width: 130px; height: 130px; animation-duration: 20s; }
+.shared-bubble-bg span:nth-child(4)  { left: 35%; width: 70px; height: 70px; animation-duration: 11s; }
+.shared-bubble-bg span:nth-child(5)  { left: 45%; width: 160px; height: 160px; animation-duration: 26s; }
+.shared-bubble-bg span:nth-child(6)  { left: 55%; width: 100px; height: 100px; animation-duration: 17s; }
+.shared-bubble-bg span:nth-child(7)  { left: 65%; width: 60px; height: 60px; animation-duration: 12s; }
+.shared-bubble-bg span:nth-child(8)  { left: 75%; width: 120px; height: 120px; animation-duration: 19s; }
+.shared-bubble-bg span:nth-child(9)  { left: 85%; width: 80px; height: 80px; animation-duration: 15s; }
+.shared-bubble-bg span:nth-child(10) { left: 92%; width: 45px; height: 45px; animation-duration: 9s; }
+
+/* TOP → BOTTOM snow animation */
+@keyframes sharedSnow {
+  0% {
+    transform: translateY(-20vh) translateX(0) scale(0.9);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(120vh) translateX(30px) scale(1.1);
+    opacity: 0;
+  }
+}

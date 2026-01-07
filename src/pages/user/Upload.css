@@ -1,0 +1,206 @@
+/* ===== PAGE ===== */
+.upload-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, #1e293b, #bebfc2);
+}
+
+/* ===== CARD ===== */
+.upload-card {
+  width: 440px;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 22px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.upload-title {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+/* ===== INPUTS ===== */
+.upload-input {
+  width: 90%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+/* ===== DROP ZONE (FIXED UI) ===== */
+.upload-drop {
+  border: 2px dashed #cbd5f5;
+  border-radius: 16px;
+  padding: 36px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.25s ease;
+  background: #ffffff;
+  position: relative;
+}
+
+.upload-drop:hover {
+  background: #f8fafc;
+  border-color: #a5b4fc;
+}
+
+.drop-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.cloud-icon {
+  font-size: 36px;
+  opacity: 0.6;
+}
+
+.drop-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  color: #0f172a;
+}
+
+.drop-or {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.drop-or strong {
+  color: #4f46e5;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ===== FILE INPUT ===== */
+.file-hidden {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ===== FILE LIST ===== */
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.file-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid;
+}
+
+.file-meta {
+  flex: 1;
+}
+
+.file-meta p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.file-meta span {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.remove-file {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ===== BUTTON ===== */
+.upload-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  background: #1e1e27;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+/* ❄ BACKGROUND BUBBLES / SNOW */
+.upload-page {
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-bubble-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.upload-bubble-bg span {
+  position: absolute;
+  top: -120px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(99,102,241,0.45),
+    rgba(99,102,241,0.15)
+  );
+  filter: blur(1px);
+  animation: uploadSnow linear infinite;
+}
+
+/* sizes & speeds */
+.upload-bubble-bg span:nth-child(1) { left: 5%;  width: 40px; height: 40px; animation-duration: 9s; }
+.upload-bubble-bg span:nth-child(2) { left: 15%; width: 70px; height: 70px; animation-duration: 14s; }
+.upload-bubble-bg span:nth-child(3) { left: 25%; width: 110px; height: 110px; animation-duration: 24s; }
+.upload-bubble-bg span:nth-child(4) { left: 35%; width: 55px; height: 55px; animation-duration: 11s; }
+.upload-bubble-bg span:nth-child(5) { left: 45%; width: 140px; height: 140px; animation-duration: 30s; }
+.upload-bubble-bg span:nth-child(6) { left: 55%; width: 85px; height: 85px; animation-duration: 18s; }
+.upload-bubble-bg span:nth-child(7) { left: 65%; width: 45px; height: 45px; animation-duration: 10s; }
+.upload-bubble-bg span:nth-child(8) { left: 75%; width: 120px; height: 120px; animation-duration: 26s; }
+.upload-bubble-bg span:nth-child(9) { left: 85%; width: 65px; height: 65px; animation-duration: 15s; }
+.upload-bubble-bg span:nth-child(10){ left: 95%; width: 35px; height: 35px; animation-duration: 8s; }
+
+/* animation */
+@keyframes uploadSnow {
+  0% {
+    transform: translateY(-20vh) translateX(0) scale(0.9);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(120vh) translateX(30px) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* ensure card stays above bubbles */
+.upload-card {
+  position: relative;
+  z-index: 1;
+}

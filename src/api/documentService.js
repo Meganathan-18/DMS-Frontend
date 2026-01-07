@@ -1,90 +1,92 @@
 import api from "./axios";
 
-export const uploadDocument = (title, file) => {
+/* =========================
+   UPLOAD DOCUMENT
+========================= */
+export const uploadDocument = (title, categoryId, file) => {
   const formData = new FormData();
   formData.append("title", title);
   formData.append("file", file);
-
-  return api.post("/documents/upload", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  if (categoryId !== null) formData.append("categoryId", categoryId);
+  return api.post("/documents/upload", formData);
 };
 
-export const getMyDocuments = () => {
-  return api.get("/documents");
-};
+/* =========================
+   DOCUMENT LIST
+========================= */
+export const getMyDocuments = () => api.get("/documents");
 
+/* =========================
+   VIEW / DOWNLOAD (OLD + NEW)
+========================= */
+export const viewDocument = (id) =>
+  api.get(`/documents/${id}/view`, { responseType: "blob" });
+
+/* 🔒 OLD (KEEP THIS) */
 export const downloadDocument = (documentId, versionId) => {
-  return api.get(
-    `/documents/${documentId}/versions/${versionId}/download`,
-    { responseType: "blob" }
-  );
-};
-// 📄 Versions
-export const getVersions = (documentId) => {
-  return api.get(`/documents/${documentId}/versions`);
-};
-
-export const uploadNewVersion = (documentId, file) => {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  return api.post(`/documents/${documentId}/versions`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-};
-
-// 🗑 Delete (Soft delete)
-// export const deleteDocument = (documentId) => {
-//   return api.delete(`/documents/${documentId}`);
-// };
-
-// // ♻ Restore
-// export const restoreDocument = (documentId) => {
-//   return api.put(`/documents/${documentId}/restore`);
-// };
-
-// // 🗑 Trash
-// export const getTrash = () => {
-//   return api.get("/documents/trash");
-// };
-
-// 🔍 Search
-// export const searchDocuments = (params) => {
-//   return api.get("/documents/search", { params });
-// };
-export const advancedSearchDocuments = (data) => {
-  return api.post("/documents/search/advanced", data);
-}   
-
-export const downloadLatest = (documentId) => {
+  if (versionId) {
+    return api.get(
+      `/documents/${documentId}/versions/${versionId}/download`,
+      { responseType: "blob" }
+    );
+  }
   return api.get(`/documents/${documentId}/download`, {
     responseType: "blob",
   });
 };
 
-export const searchDocuments = (params) => {
-  return api.get("/documents/search", { params });
+/* ✅ NEW (PREFERRED) */
+export const downloadLatest = (documentId) =>
+  api.get(`/documents/${documentId}/download`, { responseType: "blob" });
+
+export const downloadVersion = (documentId, versionId) =>
+  api.get(
+    `/documents/${documentId}/versions/${versionId}/download`,
+    { responseType: "blob" }
+  );
+
+/* =========================
+   VERSIONS
+========================= */
+export const getVersions = (documentId) =>
+  api.get(`/documents/${documentId}/versions`);
+
+export const uploadNewVersion = (documentId, file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  return api.post(`/documents/${documentId}/versions`, formData);
 };
 
-
-export const deleteDocument = (id) =>
-  api.delete(`/documents/${id}`);
-
-export const getTrash = () =>
-  api.get("/documents/trash");
-
-export const restoreDocument = (id) =>
-  api.put(`/documents/${id}/restore`);
-
-
-// view latest version (inline)
-export const viewDocument = (documentId) =>
-  api.get(`/documents/${documentId}/view`, {
-    responseType: "blob",
-  });
-
+/* =========================
+   DELETE / RESTORE
+========================= */
+export const deleteDocument = (id) => api.delete(`/documents/${id}`);
+export const restoreDocument = (id) => api.put(`/documents/${id}/restore`);
 export const permanentDelete = (id) =>
   api.delete(`/documents/${id}/permanent`);
+
+/* =========================
+   TRASH
+========================= */
+export const getTrash = () => api.get("/documents/trash");
+
+/* =========================
+   SEARCH
+========================= */
+export const searchDocuments = (params) =>
+  api.get("/documents/search", { params });
+
+/* =========================
+   FOLDERS
+========================= */
+export const getDocumentsInFolder = (folderId) =>
+  api.get(`/documents/folders/${folderId}`);
+
+/* =========================
+   SHARING
+========================= */
+export const shareDocument = (documentId, payload) =>
+  api.post(`/documents/${documentId}/share`, payload);
+
+export const getSharedWithMe = () =>
+  api.get("/documents/shared-with-me");

@@ -1,24 +1,65 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { uploadDocument } from "../../api/documentService";
+import api from "../../api/axios";
+import "./Upload.css";
 
-const UploadDocument = () => {
+/* ===== Helpers ===== */
+const getFileSize = (bytes) => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+
+const getFileType = (name) => {
+  const t = name.toLowerCase();
+  if (t.endsWith(".pdf")) return { label: "PDF", color: "#dc2626" };
+  if (t.endsWith(".doc") || t.endsWith(".docx"))
+    return { label: "DOC", color: "#2563eb" };
+  if (t.endsWith(".jpg") || t.endsWith(".jpeg") || t.endsWith(".png"))
+    return { label: "IMG", color: "#16a34a" };
+  return { label: "FILE", color: "#64748b" };
+};
+
+const Upload = () => {
+  const [files, setFiles] = useState([]);
   const [title, setTitle] = useState("");
-  const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!title || !file) {
-      alert("Please enter title and choose a file");
-      return;
-    }
+  const [categories, setCategories] = useState([]);
+  const [categoryId, setCategoryId] = useState(null);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const res = await api.get("/categories/allowed");
+        setCategories(res.data);
+      } catch {
+        alert("Failed to load categories");
+      }
+    };
+    loadCategories();
+  }, []);
+
+  const handleFilePick = (e) => {
+    setFiles((prev) => [...prev, ...Array.from(e.target.files)]);
+  };
+
+  const removeFile = (index) => {
+    setFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleUpload = async () => {
+    if (!files.length) return alert("Select at least one file");
 
     try {
       setLoading(true);
-      await uploadDocument(title, file);
-      alert("Document uploaded successfully");
+      for (const file of files) {
+        await uploadDocument(title || file.name, categoryId, file);
+      }
+      alert("Upload successful");
+      setFiles([]);
       setTitle("");
-      setFile(null);
+      setCategoryId(null);
     } catch {
       alert("Upload failed");
     } finally {
@@ -27,115 +68,99 @@ const UploadDocument = () => {
   };
 
   return (
-    <div style={styles.page}>
-      <form style={styles.card} onSubmit={handleSubmit}>
-        <h2 style={styles.heading}>Upload Document</h2>
+    <div className="upload-page">
+      {/* ❄ BACKGROUND BUBBLES (ADDED ONLY) */}
+      <div className="upload-bubble-bg">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <span key={i} />
+        ))}
+      </div>
 
-        {/* Title */}
+      {/* 📦 YOUR EXISTING CARD (UNCHANGED) */}
+      <div className="upload-card">
+        <h2 className="upload-title">☁️ Upload Files</h2>
+
         <input
-          type="text"
-          placeholder="Document title"
+          className="upload-input"
+          placeholder="Title (optional)"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          style={styles.input}
         />
 
-        {/* File Picker */}
-        <label style={styles.fileBox}>
+        <select
+          className="upload-input"
+          value={categoryId ?? ""}
+          onChange={(e) =>
+            setCategoryId(e.target.value ? Number(e.target.value) : null)
+          }
+        >
+          <option value="">📂 No Category</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id} disabled={c.permission === "READ"}>
+              {c.name} {c.permission === "READ" ? "🔒 Read only" : ""}
+            </option>
+          ))}
+        </select>
+
+        {/* DROP ZONE (UNCHANGED) */}
+        <label className="upload-drop">
+          <div className="drop-inner">
+            <div className="cloud-icon">☁️</div>
+            <p className="drop-title">Drop your files here</p>
+            <span className="drop-or">
+              or <strong>browse</strong>
+            </span>
+          </div>
+
           <input
             type="file"
-            hidden
-            onChange={(e) => setFile(e.target.files[0])}
+            multiple
+            onChange={handleFilePick}
+            className="file-hidden"
           />
-          <span style={styles.fileBtn}>Choose File</span>
-          <span style={styles.fileName}>
-            {file ? file.name : "No file selected"}
-          </span>
         </label>
 
-        {/* Upload Button */}
-        <button style={styles.uploadBtn} disabled={loading}>
+        {/* FILE LIST (UNCHANGED) */}
+        {files.length > 0 && (
+          <div className="file-list">
+            {files.map((file, index) => {
+              const type = getFileType(file.name);
+              return (
+                <div className="file-row" key={index}>
+                  <span
+                    className="file-badge"
+                    style={{ color: type.color, borderColor: type.color }}
+                  >
+                    {type.label}
+                  </span>
+
+                  <div className="file-meta">
+                    <p>{file.name}</p>
+                    <span>{getFileSize(file.size)}</span>
+                  </div>
+
+                  <button
+                    className="remove-file"
+                    onClick={() => removeFile(index)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <button
+          className="upload-btn"
+          onClick={handleUpload}
+          disabled={loading}
+        >
           {loading ? "Uploading..." : "Upload"}
         </button>
-      </form>
+      </div>
     </div>
   );
 };
 
-export default UploadDocument;
-
-
-const styles = {
-  page: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "flex-start",
-    justifyContent: "center",
-    paddingTop: "60px",
-    background: "#f8fafc",
-  },
-
-  card: {
-    background: "#fff",
-    width: "100%",
-    maxWidth: "420px",
-    padding: "28px",
-    borderRadius: "14px",
-    boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
-    display: "flex",
-    flexDirection: "column",
-    gap: "18px",
-  },
-
-  heading: {
-    marginBottom: "6px",
-    fontSize: "22px",
-    fontWeight: "600",
-  },
-
-  input: {
-    padding: "12px 14px",
-    fontSize: "15px",
-    borderRadius: "10px",
-    border: "1px solid #e5e7eb",
-    outline: "none",
-  },
-
-  fileBox: {
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-    border: "1px dashed #cbd5f5",
-    borderRadius: "10px",
-    padding: "14px",
-    cursor: "pointer",
-  },
-
-  fileBtn: {
-    background: "#eef2ff",
-    padding: "8px 14px",
-    borderRadius: "8px",
-    fontSize: "14px",
-    fontWeight: "500",
-  },
-
-  fileName: {
-    fontSize: "14px",
-    color: "#475569",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-  },
-
-  uploadBtn: {
-    marginTop: "8px",
-    padding: "12px",
-    borderRadius: "10px",
-    border: "none",
-    background: "#4f46e5",
-    color: "#fff",
-    fontSize: "15px",
-    fontWeight: "500",
-    cursor: "pointer",
-  },
-};
+export default Upload;

@@ -8,34 +8,55 @@ const UserLayout = () => {
     <div style={styles.wrapper}>
       {/* ===== Sidebar ===== */}
       <aside style={styles.sidebar}>
-        <h2 style={styles.logo}>📁 DMS</h2>
+        <h2 style={styles.logo}>
+          📁 <span style={{ color: "#60a5fa" }}>DMS</span>
+        </h2>
 
         <nav style={styles.nav}>
           <NavLink to="/user" style={linkStyle}>
             🏠 Dashboard
           </NavLink>
+
           <NavLink to="/user/upload" style={linkStyle}>
-            ⬆ Upload
+            Upload ⬆ 
           </NavLink>
+
           <NavLink to="/user/documents" style={linkStyle}>
-            📄 My Documents
+            My Documents 📄 
           </NavLink>
+
           <NavLink to="/user/search" style={linkStyle}>
-            🔍 Search
+            Search 🔍 
           </NavLink>
+
           <NavLink to="/user/trash" style={linkStyle}>
-            🗑 Trash
+            Trash 🗑 
+          </NavLink>
+
+          
+          <NavLink to="/user/starred" style={linkStyle}>
+  Starred Files ⭐
+</NavLink>
+
+
+          <NavLink to="/user/documents/shared" style={linkStyle}>
+            Shared With Me 🤝 
+          </NavLink>
+
+          <NavLink to="/user/categories" style={categoryLinkStyle}>
+            Categories 🗂 
           </NavLink>
         </nav>
       </aside>
 
       {/* ===== Main ===== */}
       <main style={styles.main}>
-        {/* ===== Top Navbar ===== */}
+        {/* ===== Header ===== */}
         <header style={styles.header}>
-          <h3 style={styles.pageTitle}>Welcome {auth.username} 👋</h3>
+          <h3 style={styles.pageTitle}>
+            Welcome <span style={{ color: "#2563eb" }}>{auth.username}</span> 👋
+          </h3>
 
-          {/* User Profile */}
           <div style={styles.profile}>
             <img
               src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
@@ -61,15 +82,33 @@ const UserLayout = () => {
   );
 };
 
-/* ===== Active Link Style ===== */
+/* ===== NavLink Styles ===== */
 const linkStyle = ({ isActive }) => ({
-  color: "#e5e7eb",
+  color: isActive ? "#60a5fa" : "#e5e7eb",
   textDecoration: "none",
-  padding: "12px 14px",
-  borderRadius: "8px",
-  background: isActive ? "#334155" : "transparent",
+  padding: "12px 16px",
+  borderRadius: "10px",
+  background: isActive ? "#1e293b" : "transparent",
   fontWeight: "500",
-  transition: "0.2s",
+  transition: "all 0.2s ease",
+});
+
+// const sharedLinkStyle = ({ isActive }) => ({
+//   color: isActive ? "#d8b4fe" : "#c084fc",
+//   textDecoration: "none",
+//   padding: "12px 16px",
+//   borderRadius: "10px",
+//   background: isActive ? "rgba(192,132,252,0.2)" : "transparent",
+//   fontWeight: "500",
+// });
+
+const categoryLinkStyle = ({ isActive }) => ({
+  color: isActive ? "#bfdbfe" : "#93c5fd",
+  textDecoration: "none",
+  padding: "12px 16px",
+  borderRadius: "10px",
+  background: isActive ? "rgba(96,165,250,0.25)" : "rgba(96,165,250,0.12)",
+  fontWeight: "600",
 });
 
 /* ===== Styles ===== */
@@ -80,38 +119,41 @@ const styles = {
     background: "#f1f5f9",
   },
 
+  /* Sidebar */
   sidebar: {
-    width: "240px",
-    background: "#0f172a",
+    width: "250px",
+    background: "linear-gradient(180deg, #0f172a, #020617)",
     color: "#fff",
-    padding: "24px",
+    padding: "26px 18px",
     display: "flex",
     flexDirection: "column",
   },
 
   logo: {
-    marginBottom: "30px",
-    fontSize: "22px",
+    marginBottom: "34px",
+    fontSize: "24px",
     fontWeight: "700",
   },
 
   nav: {
     display: "flex",
     flexDirection: "column",
-    gap: "10px",
+    gap: "8px",
   },
 
+  /* Main */
   main: {
     flex: 1,
     display: "flex",
     flexDirection: "column",
   },
 
+  /* Header */
   header: {
-    height: "70px",
+    height: "72px",
     background: "#ffffff",
     borderBottom: "1px solid #e5e7eb",
-    padding: "0 28px",
+    padding: "0 30px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -123,6 +165,7 @@ const styles = {
     color: "#0f172a",
   },
 
+  /* Profile */
   profile: {
     display: "flex",
     alignItems: "center",
@@ -130,8 +173,8 @@ const styles = {
   },
 
   avatar: {
-    width: "46px",
-    height: "46px",
+    width: "44px",
+    height: "44px",
     borderRadius: "50%",
     border: "1px solid #e5e7eb",
   },
@@ -139,27 +182,26 @@ const styles = {
   userInfo: {
     display: "flex",
     flexDirection: "column",
+    alignItems: "flex-start",
   },
 
   username: {
-    fontSize: "22px",
+    fontSize: "15px",
     fontWeight: "600",
-    color: "#164fd5ff",
-    marginLeft: "10px",
-    marginBottom: "2px",
+    color: "#1e40af",
   },
 
   logoutBtn: {
     marginTop: "4px",
-    padding: "4px 10px",
+    padding: "4px 12px",
     fontSize: "12px",
     borderRadius: "6px",
     border: "1px solid #e5e7eb",
     background: "#f8fafc",
     cursor: "pointer",
-    width: "fit-content",
   },
 
+  /* Content */
   content: {
     padding: "28px",
     flex: 1,

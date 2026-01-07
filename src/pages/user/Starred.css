@@ -1,0 +1,72 @@
+/* ===== REQUIRED FOR BACKGROUND ===== */
+.starred-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  
+}
+
+/* ===== SNOW BACKGROUND LAYER ===== */
+.starred-bubble-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ===== SNOW PARTICLES ===== */
+.starred-bubble-bg span {
+  position: absolute;
+  top: -120px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(59,130,246,0.45),
+    rgba(59,130,246,0.15)
+  );
+  animation: starredSnow linear infinite;
+}
+
+/* Different sizes & speeds */
+.starred-bubble-bg span:nth-child(1) { left: 5%;  animation-duration: 10s; }
+.starred-bubble-bg span:nth-child(2) { left: 15%; animation-duration: 14s; width: 90px; height: 90px; }
+.starred-bubble-bg span:nth-child(3) { left: 25%; animation-duration: 18s; }
+.starred-bubble-bg span:nth-child(4) { left: 35%; animation-duration: 12s; width: 120px; height: 120px; }
+.starred-bubble-bg span:nth-child(5) { left: 45%; animation-duration: 22s; }
+.starred-bubble-bg span:nth-child(6) { left: 55%; animation-duration: 16s; width: 80px; height: 80px; }
+.starred-bubble-bg span:nth-child(7) { left: 65%; animation-duration: 26s; }
+.starred-bubble-bg span:nth-child(8) { left: 75%; animation-duration: 14s; width: 100px; height: 100px; }
+.starred-bubble-bg span:nth-child(9) { left: 85%; animation-duration: 20s; }
+.starred-bubble-bg span:nth-child(10){ left: 95%; animation-duration: 9s; }
+
+/* ===== TOP → BOTTOM SNOW ===== */
+@keyframes starredSnow {
+  0% {
+    transform: translateY(-20vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(120vh);
+    opacity: 0;
+  }
+}
+
+/* ===== KEEP CONTENT ABOVE BACKGROUND ===== */
+.starred-page > h2,
+.starred-page > h3,
+.starred-page > .grid,
+.starred-page > p {
+  position: relative;
+  z-index: 1;
+}
+
+/* FORCE CONTENT ABOVE BUBBLES */
+.starred-page > *:not(.starred-bubble-bg) {
+  position: relative;
+  z-index: 1;
+}
