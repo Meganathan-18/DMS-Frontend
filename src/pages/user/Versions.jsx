@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import {
   getVersions,
   uploadNewVersion,
-  downloadDocument,
+  downloadVersion,   // ✅ use correct API
 } from "../../api/documentService";
 import "./Versions.css";
 
@@ -37,7 +37,7 @@ const Versions = () => {
   };
 
   const handleDownload = async (versionId) => {
-    const res = await downloadDocument(documentId, versionId);
+    const res = await downloadVersion(documentId, versionId); // ✅ FIX
     const url = window.URL.createObjectURL(res.data);
 
     const a = document.createElement("a");
@@ -51,48 +51,45 @@ const Versions = () => {
   if (loading) return <p>Loading files...</p>;
 
   return (
-  <div className="versions-container">
-    <h2 className="versions-title">Document Versions</h2>
+    <div className="versions-container">
+      <h2 className="versions-title">Document Versions</h2>
 
-    {/* Upload bar */}
-    <div className="versions-upload">
-      <input
-        type="file"
-        onChange={(e) => setFile(e.target.files[0])}
-      />
-      <button onClick={handleUpload}>Upload new version</button>
-    </div>
-
-    {versions.length === 0 ? (
-      <div className="versions-empty">No versions found</div>
-    ) : (
-      <div className="versions-table">
-        <div className="versions-header">
-          <span>Version</span>
-          <span>Uploaded At</span>
-          <span></span>
-        </div>
-
-        {versions.map((v) => (
-          <div key={v.id} className="versions-row">
-            <span className="ver-no">v{v.versionNumber}</span>
-
-            <span className="ver-date">
-              {new Date(v.uploadedAt).toLocaleString()}
-            </span>
-
-            <button
-              className="download-btn"
-              onClick={() => handleDownload(v.id)}
-            >
-              Download
-            </button>
-          </div>
-        ))}
+      <div className="versions-upload">
+        <input
+          type="file"
+          onChange={(e) => setFile(e.target.files[0])}
+        />
+        <button onClick={handleUpload}>Upload new version</button>
       </div>
-    )}
-  </div>
-);
+
+      {versions.length === 0 ? (
+        <div className="versions-empty">No versions found</div>
+      ) : (
+        <div className="versions-table">
+          <div className="versions-header">
+            <span>Version</span>
+            <span>Uploaded At</span>
+            <span></span>
+          </div>
+
+          {versions.map((v) => (
+            <div key={v.id} className="versions-row">
+              <span className="ver-no">v{v.versionNumber}</span>
+              <span className="ver-date">
+                {new Date(v.uploadedAt).toLocaleString()}
+              </span>
+              <button
+                className="download-btn"
+                onClick={() => handleDownload(v.id)}
+              >
+                Download
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Versions;

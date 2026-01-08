@@ -86,7 +86,8 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await api.post("/auth/login", { username, password });
+      const res = await api.post("/api/auth/login", { username, password });
+
       login(res.data.token, res.data.role);
       navigate(res.data.role === "ROLE_ADMIN" ? "/admin" : "/user");
     } catch (err) {

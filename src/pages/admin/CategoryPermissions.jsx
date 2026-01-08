@@ -17,7 +17,7 @@ const CategoryPermissions = () => {
     try {
       setLoading(true);
       await api.post(
-        `/admin/category-permissions?categoryId=${categoryId}&userId=${userId}&permission=${permission}`
+        `api/admin/category-permissions?categoryId=${categoryId}&userId=${userId}&permission=${permission}`
       );
       alert("✅ Permission assigned successfully");
       setCategoryId("");

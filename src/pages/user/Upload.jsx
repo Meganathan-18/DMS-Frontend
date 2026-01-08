@@ -31,7 +31,7 @@ const Upload = () => {
   useEffect(() => {
     const loadCategories = async () => {
       try {
-        const res = await api.get("/categories/allowed");
+        const res = await api.get("api/categories/allowed");
         setCategories(res.data);
       } catch {
         alert("Failed to load categories");

@@ -2,32 +2,32 @@ import api from "./axios";
 
 /* 📁 Create Folder */
 export const createFolder = (name) => {
-  return api.post("/folders", null, {
+  return api.post("api/folders", null, {
     params: { name },
   });
 };
 
 /* 📁 Get My Folders */
 export const getMyFolders = () => {
-  return api.get("/folders");
+  return api.get("api/folders");
 };
 
 /* 🗑 Delete Folder */
 export const deleteFolder = (id) => {
-  return api.delete(`/folders/${id}`);
+  return api.delete(`api/folders/${id}`);
 };
 /* 🗑 Move to Folder */
 export const getFolderTrash = () =>
-  api.get("/folders/trash");
+  api.get("api/folders/trash");
 
 /* ♻ Restore Folder */
 export const restoreFolder = (id) => {
-  return api.put(`/folders/${id}/restore`);
+  return api.put(`api/folders/${id}/restore`);
 };
 
 /* ⬇ Download Folder as ZIP */
 export const downloadFolderZip = (id) =>
-  api.get(`/folders/${id}/download`, {
+  api.get(`api/folders/${id}/download`, {
     responseType: "blob",
   });
 
@@ -48,7 +48,7 @@ export const uploadToFolder = (folderId, file) => {
 };
 
 export const downloadEntireDrive = () =>
-  api.get("/folders/download/all", {
+  api.get("api/folders/download/all", {
     responseType: "blob",
   });
 
@@ -57,4 +57,4 @@ export const downloadEntireDrive = () =>
 //   api.delete(`/folders/${id}/permanent`);
 
 export const permanentDeleteFolder = (id) =>
-  api.delete(`/folders/${id}/permanent`);
+  api.delete(`api/folders/${id}/permanent`);

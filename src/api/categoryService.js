@@ -2,23 +2,35 @@ import api from "./axios";
 
 /* ================= ADMIN ================= */
 
-// create category
+/**
+ * Create a category (ADMIN only)
+ * POST /api/admin/categories
+ */
 export const createCategory = (data) =>
-  api.post("/admin/categories", data);
+  api.post("/api/admin/categories", data);
 
-// list all categories (admin)
+/**
+ * List all categories (ADMIN only)
+ * GET /api/admin/categories
+ */
 export const getAllCategories = () =>
-  api.get("/admin/categories");
+  api.get("/api/admin/categories");
 
 
 /* ================= USER ================= */
 
-// list categories for user upload dropdown
+/**
+ * List categories for user upload dropdown
+ * (read-only, USER role)
+ * GET /api/admin/categories
+ * ⚠️ You may later expose /api/categories if needed
+ */
 export const getCategoriesForUser = () =>
-  api.get("/admin/categories"); 
-// (later you can expose /api/categories if needed)
+  api.get("/api/admin/categories");
 
-
-export const getAllowedCategories = () => {
-  return api.get("/categories/allowed");
-};
+/**
+ * Get allowed categories for current user
+ * GET /api/categories/allowed
+ */
+export const getAllowedCategories = () =>
+  api.get("/api/categories/allowed");

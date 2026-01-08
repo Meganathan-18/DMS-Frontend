@@ -8,85 +8,79 @@ export const uploadDocument = (title, categoryId, file) => {
   formData.append("title", title);
   formData.append("file", file);
   if (categoryId !== null) formData.append("categoryId", categoryId);
-  return api.post("/documents/upload", formData);
+
+  return api.post("/api/documents/upload", formData);
 };
 
 /* =========================
    DOCUMENT LIST
 ========================= */
-export const getMyDocuments = () => api.get("/documents");
+export const getMyDocuments = () =>
+  api.get("/api/documents");
 
 /* =========================
-   VIEW / DOWNLOAD (OLD + NEW)
+   VIEW / DOWNLOAD
 ========================= */
 export const viewDocument = (id) =>
-  api.get(`/documents/${id}/view`, { responseType: "blob" });
+  api.get(`/api/documents/${id}/view`, { responseType: "blob" });
 
-/* 🔒 OLD (KEEP THIS) */
-export const downloadDocument = (documentId, versionId) => {
-  if (versionId) {
-    return api.get(
-      `/documents/${documentId}/versions/${versionId}/download`,
-      { responseType: "blob" }
-    );
-  }
-  return api.get(`/documents/${documentId}/download`, {
-    responseType: "blob",
-  });
-};
+export const downloadLatest = (id) =>
+  api.get(`/api/documents/${id}/download`, { responseType: "blob" });
 
-/* ✅ NEW (PREFERRED) */
-export const downloadLatest = (documentId) =>
-  api.get(`/documents/${documentId}/download`, { responseType: "blob" });
-
-export const downloadVersion = (documentId, versionId) =>
+export const downloadVersion = (docId, versionId) =>
   api.get(
-    `/documents/${documentId}/versions/${versionId}/download`,
+    `/api/documents/${docId}/versions/${versionId}/download`,
     { responseType: "blob" }
   );
 
 /* =========================
    VERSIONS
 ========================= */
-export const getVersions = (documentId) =>
-  api.get(`/documents/${documentId}/versions`);
+export const getVersions = (docId) =>
+  api.get(`/api/documents/${docId}/versions`);
 
-export const uploadNewVersion = (documentId, file) => {
+export const uploadNewVersion = (docId, file) => {
   const formData = new FormData();
   formData.append("file", file);
-  return api.post(`/documents/${documentId}/versions`, formData);
+
+  return api.post(`/api/documents/${docId}/versions`, formData);
 };
 
 /* =========================
    DELETE / RESTORE
 ========================= */
-export const deleteDocument = (id) => api.delete(`/documents/${id}`);
-export const restoreDocument = (id) => api.put(`/documents/${id}/restore`);
+export const deleteDocument = (id) =>
+  api.delete(`/api/documents/${id}`);
+
+export const restoreDocument = (id) =>
+  api.put(`/api/documents/${id}/restore`);
+
 export const permanentDelete = (id) =>
-  api.delete(`/documents/${id}/permanent`);
+  api.delete(`/api/documents/${id}/permanent`);
 
 /* =========================
    TRASH
 ========================= */
-export const getTrash = () => api.get("/documents/trash");
+export const getTrash = () =>
+  api.get("/api/documents/trash");
 
 /* =========================
    SEARCH
 ========================= */
 export const searchDocuments = (params) =>
-  api.get("/documents/search", { params });
+  api.get("/api/documents/search", { params });
 
 /* =========================
    FOLDERS
 ========================= */
 export const getDocumentsInFolder = (folderId) =>
-  api.get(`/documents/folders/${folderId}`);
+  api.get(`/api/documents/folders/${folderId}`);
 
 /* =========================
    SHARING
 ========================= */
-export const shareDocument = (documentId, payload) =>
-  api.post(`/documents/${documentId}/share`, payload);
+export const shareDocument = (docId, payload) =>
+  api.post(`/api/documents/${docId}/share`, payload);
 
 export const getSharedWithMe = () =>
-  api.get("/documents/shared-with-me");
+  api.get("/api/documents/shared-with-me");

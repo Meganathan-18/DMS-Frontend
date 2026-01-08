@@ -6,7 +6,7 @@ const CategoryReports = () => {
   const [reports, setReports] = useState([]);
 
   useEffect(() => {
-    api.get("/admin/reports/categories").then((res) => {
+    api.get("api/admin/reports/categories").then((res) => {
       setReports(res.data);
     });
   }, []);

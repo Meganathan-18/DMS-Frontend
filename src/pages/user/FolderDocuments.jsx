@@ -24,7 +24,7 @@ export default function FolderDocuments() {
   const loadDocs = async () => {
     try {
       const res = await api.get(
-        `/documents/folders/${folderId}/documents`
+        `api/documents/folders/${folderId}/documents`
       );
       setDocs(res.data);
     } catch {
@@ -52,7 +52,7 @@ export default function FolderDocuments() {
   // 🔍 VIEW (NEW TAB)
   const handleView = async (doc) => {
     const res = await api.get(
-      `/documents/${doc.id}/view`,
+      `api/documents/${doc.id}/view`,
       { responseType: "blob" }
     );
 
@@ -68,7 +68,7 @@ export default function FolderDocuments() {
   // ⬇ DOWNLOAD
   const handleDownload = async (doc) => {
     const res = await api.get(
-      `/documents/${doc.id}/download`,
+      `api/documents/${doc.id}/download`,
       { responseType: "blob" }
     );
 
@@ -85,7 +85,7 @@ export default function FolderDocuments() {
   const handleDelete = async (doc) => {
     if (!window.confirm("Delete document?")) return;
 
-    await api.delete(`/documents/${doc.id}`);
+    await api.delete(`api/documents/${doc.id}`);
     setDocs((prev) => prev.filter((d) => d.id !== doc.id));
     setOpenMenuId(null);
   };

@@ -16,7 +16,7 @@ const CategoryDocuments = () => {
 
     try {
       setLoading(true);
-      const res = await api.get(`/documents/category/${categoryId}`);
+      const res = await api.get(`api/documents/category/${categoryId}`);
       setDocs(res.data);
     } catch{
       alert("Failed to load documents");

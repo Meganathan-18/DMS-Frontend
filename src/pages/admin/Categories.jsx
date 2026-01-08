@@ -11,7 +11,7 @@ const Categories = () => {
   const load = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/admin/categories");
+      const res = await api.get("api/admin/categories");
       setCategories(res.data);
       setError("");
     } catch (err) {
@@ -25,7 +25,7 @@ const Categories = () => {
     if (!name.trim()) return;
 
     try {
-      await api.post("/admin/categories", { name });
+      await api.post("api/admin/categories", { name });
       setName("");
       load();
     } catch (err) {
