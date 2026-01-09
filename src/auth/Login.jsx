@@ -80,26 +80,26 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setError("");
+  setLoading(true);
 
-    try {
-      const res = await api.post("/api/auth/login", { username, password });
+  try {
+    const res = await api.post("/api/auth/login", { username, password });
 
-      login(res.data.token, res.data.role);
-      navigate(res.data.role === "ROLE_ADMIN" ? "/admin" : "/user");
-    } catch (err) {
-      if (err.response?.status === 403 || err.response?.status === 401) {
-        setError("❌ Invalid username or password");
-      } else {
-        setError("⚠️ Something went wrong. Please try again.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+    // backend returns { userId, role }
+    login(res.data.userId, res.data.role);
+
+    navigate(res.data.role === "ADMIN" ? "/admin" : "/user");
+  } catch {
+    setError("❌ Invalid username or password");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   return (
     <div style={styles.page}>

@@ -106,7 +106,8 @@ const Register = () => {
 
     try {
       const endpoint =
-        role === "ADMIN" ? "api/auth/register-admin" : "/api/auth/register";
+  role === "ADMIN" ? "/api/auth/register-admin" : "/api/auth/register";
+
 
       await api.post(endpoint, { username, password });
 

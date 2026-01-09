@@ -4,24 +4,34 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-   if (token && !config.url.includes("/auth/")) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+/**
+ * 🔥 REQUEST INTERCEPTOR
+ * Attach logged-in userId to every request
+ */
+api.interceptors.request.use(
+  (config) => {
+    const userId = localStorage.getItem("userId");
 
-  return config;
-});
+    if (userId) {
+      config.headers["X-USER-ID"] = userId;
+    }
 
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-
+/**
+ * 🔥 RESPONSE INTERCEPTOR
+ * Handle blocked / unauthorized access
+ */
 api.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     const status = error.response?.status;
     const message = error.response?.data;
 
-    // 🔐 ONLY logout if backend EXPLICITLY says blocked
+    // 🚫 BLOCKED USER
     if (status === 403 && message === "User is blocked by admin") {
       alert("Your account is blocked by admin");
       localStorage.clear();
@@ -29,7 +39,13 @@ api.interceptors.response.use(
       return;
     }
 
-    // ❗ For all other 403s → DO NOT LOGOUT
+    // 🚫 NOT LOGGED IN / INVALID USER
+    if (status === 401) {
+      localStorage.clear();
+      window.location.href = "/login";
+      return;
+    }
+
     return Promise.reject(error);
   }
 );

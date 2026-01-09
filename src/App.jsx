@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./auth/Login";
 import Register from "./auth/Register";
-import ProtectedRoute from "./auth/ProtectedRoute";
 import RoleGuard from "./auth/RoleGuard";
+
 import StarredDocuments from "./pages/user/StarredDocuments";
 import UserLayout from "./layouts/UserLayout";
 import AdminLayout from "./layouts/AdminLayout";
@@ -37,11 +37,9 @@ const App = () => (
       <Route
         path="/user"
         element={
-          <ProtectedRoute>
-            <RoleGuard role="ROLE_USER">
-              <UserLayout />
-            </RoleGuard>
-          </ProtectedRoute>
+          <RoleGuard role="USER">
+            <UserLayout />
+          </RoleGuard>
         }
       >
         <Route index element={<Dashboard />} />
@@ -60,14 +58,12 @@ const App = () => (
       <Route
         path="/admin"
         element={
-          <ProtectedRoute>
-            <RoleGuard role="ROLE_ADMIN">
-              <AdminLayout />
-            </RoleGuard>
-          </ProtectedRoute>
+          <RoleGuard role="ADMIN">
+            <AdminLayout />
+          </RoleGuard>
         }
       >
-         <Route index element={<Navigate to="dashboard" replace />} />
+        <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="users" element={<UserManagement />} />
         <Route path="categories" element={<Categories />} />

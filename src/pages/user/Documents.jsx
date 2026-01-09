@@ -29,31 +29,35 @@ import fileIcon from "../../assets/icons/file.png";
 /* =========================
    SHARE BOX
 ========================= */
-const ShareBox = ({ documentId }) => {
+const ShareBox = ({ documentId, onClose }) => {
   const [userId, setUserId] = useState("");
   const [permission, setPermission] = useState("READ");
-  
-  const share = async () => {
+
+  const share = async (e) => {
+    e.stopPropagation(); // 🔥 CRITICAL
+
     if (!userId.trim()) return alert("Enter user ID");
+
     await shareDocument(documentId, { userId, permission });
     alert("Document shared");
+
     setUserId("");
+    onClose(); // ✅ close menu safely
   };
 
   return (
-    <div
-      className="share-box"
-      onClick={(e) => e.stopPropagation()}  // 🔥 KEY FIX
-    >
+    <div className="share-box" onClick={(e) => e.stopPropagation()}>
       <input
         placeholder="User ID"
         value={userId}
         onChange={(e) => setUserId(e.target.value)}
+        onClick={(e) => e.stopPropagation()}
       />
 
       <select
         value={permission}
         onChange={(e) => setPermission(e.target.value)}
+        onClick={(e) => e.stopPropagation()}
       >
         <option value="READ">READ</option>
         <option value="WRITE">WRITE</option>
@@ -63,6 +67,7 @@ const ShareBox = ({ documentId }) => {
     </div>
   );
 };
+
 
 /* =========================
    DOCUMENTS PAGE
@@ -79,7 +84,10 @@ const Documents = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("ALL");
 
-  const [openMenu, setOpenMenu] = useState(null);
+  // ✅ FIXED MENU STATES
+  const [openDocMenu, setOpenDocMenu] = useState(null);
+  const [openFolderMenu, setOpenFolderMenu] = useState(null);
+
   const [selectedDocs, setSelectedDocs] = useState(new Set());
 
   const [showFolderModal, setShowFolderModal] = useState(false);
@@ -88,10 +96,11 @@ const Documents = () => {
   const [starred, setStarred] = useState(
     JSON.parse(localStorage.getItem("starredDocs") || "[]")
   );
-  
+
+  /* ===== PERSIST STAR ===== */
   useEffect(() => {
-  localStorage.setItem("starredDocs", JSON.stringify(starred));
-}, [starred]);
+    localStorage.setItem("starredDocs", JSON.stringify(starred));
+  }, [starred]);
 
   /* ===== LOAD DATA ===== */
   useEffect(() => {
@@ -116,14 +125,15 @@ const Documents = () => {
     getAllowedCategories().then((res) => setCategories(res.data));
   }, []);
 
+  /* ===== CLOSE MENUS ON OUTSIDE CLICK ===== */
   useEffect(() => {
-    localStorage.setItem("starredDocs", JSON.stringify(starred));
-  }, [starred]);
+    const closeMenus = () => {
+      setOpenDocMenu(null);
+      setOpenFolderMenu(null);
+    };
 
-  useEffect(() => {
-    const close = () => setOpenMenu(null);
-    document.addEventListener("click", close);
-    return () => document.removeEventListener("click", close);
+    document.addEventListener("click", closeMenus);
+    return () => document.removeEventListener("click", closeMenus);
   }, []);
 
   /* ===== HELPERS ===== */
@@ -199,23 +209,14 @@ const Documents = () => {
     a.click();
   };
 
- const handleDownloadAll = async () => {
-  try {
+  const handleDownloadAll = async () => {
     const res = await downloadEntireDrive();
-    const url = window.URL.createObjectURL(res.data);
-
+    const url = URL.createObjectURL(res.data);
     const a = document.createElement("a");
     a.href = url;
     a.download = "MyDrive.zip";
     a.click();
-
-    window.URL.revokeObjectURL(url);
-  } catch (err) {
-    alert("Download failed");
-    console.error(err);
-  }
-};
-
+  };
 
   const getFileIcon = (title) => {
     const t = title.toLowerCase();
@@ -226,22 +227,17 @@ const Documents = () => {
   };
 
   /* ===== FILTER ===== */
-const filteredDocs = [...docs]
-  .filter((d) => {
-    if (!d.title.toLowerCase().includes(search.toLowerCase())) return false;
-
-    if (selectedCategory === "ALL") return true;
-
-    return d.categoryId === Number(selectedCategory);
-  })
-  .sort((a, b) => {
-    if (sortBy === "name") {
-      return a.title.localeCompare(b.title);
-    }
-    return new Date(b.createdAt) - new Date(a.createdAt);
-  });
-
-  /* ===== RENDER ===== */
+  const filteredDocs = [...docs]
+    .filter((d) => {
+      if (!d.title.toLowerCase().includes(search.toLowerCase())) return false;
+      if (selectedCategory === "ALL") return true;
+      return d.categoryId === Number(selectedCategory);
+    })
+    .sort((a, b) =>
+      sortBy === "name"
+        ? a.title.localeCompare(b.title)
+        : new Date(b.createdAt) - new Date(a.createdAt)
+    );
 
   if (loading) return <p>Loading...</p>;
 
@@ -265,70 +261,62 @@ const filteredDocs = [...docs]
         />
 
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-  <option value="name">Sort by Name</option>
-  <option value="date">Sort by Date</option>
-</select>
+          <option value="name">Sort by Name</option>
+          <option value="date">Sort by Date</option>
+        </select>
 
-<select
-  value={selectedCategory}
-  onChange={(e) => setSelectedCategory(e.target.value)}
->
-  <option value="ALL">All Categories</option>
-
-  {categories.map((c) => (
-    <option key={c.id} value={c.id}>
-      {c.name}
-    </option>
-  ))}
-</select>
-
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+        >
+          <option value="ALL">All Categories</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* ===== FOLDERS ===== */}
       <div className="folder-grid">
-  {folders.map((f) => (
-    <div
-      key={f.id}
-      className="folder-card"
-      onClick={() => navigate(`/user/folders/${f.id}`)}
-    >
-      {/* ===== Top Row ===== */}
-      <div className="folder-header">
-        <span className="folder-icon">📁</span>
-
-        {/* 3 DOTS */}
-        <button
-          className="folder-menu-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpenMenu(openMenu === f.id ? null : f.id);
-          }}
-        >
-          ⋮
-        </button>
-
-        {/* MENU */}
-        {openMenu === f.id && (
+        {folders.map((f) => (
           <div
-            className="folder-menu"
-            onClick={(e) => e.stopPropagation()}
+            key={f.id}
+            className="folder-card"
+            onClick={() => navigate(`/user/folders/${f.id}`)}
           >
-            <div onClick={() => handleDownloadFolderZip(f)}>
-              Download
+            <div className="folder-header">
+              <span className="folder-icon">📁</span>
+
+              <button
+                className="folder-menu-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenFolderMenu(openFolderMenu === f.id ? null : f.id);
+                  setOpenDocMenu(null);
+                }}
+              >
+                ⋮
+              </button>
+
+              {openFolderMenu === f.id && (
+                <div
+                  className="folder-menu"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div onClick={() => handleDownloadFolderZip(f)}>
+                    Download
+                  </div>
+                  <div onClick={() => handleDeleteFolder(f.id)}>Delete</div>
+                </div>
+              )}
             </div>
-            <div onClick={() => handleDeleteFolder(f.id)}>
-              Delete
-            </div>
+
+            <div className="folder-name">{f.name}</div>
           </div>
-        )}
+        ))}
       </div>
-
-      {/* ===== Name ===== */}
-      <div className="folder-name">{f.name}</div>
-    </div>
-  ))}
-</div>
-
 
       {/* ===== DOCUMENTS ===== */}
       <div className="documents-grid">
@@ -340,42 +328,46 @@ const filteredDocs = [...docs]
                 checked={selectedDocs.has(doc.id)}
                 onChange={() => toggleSelect(doc.id)}
               />
+
               <span onClick={() => toggleStar(doc.id)}>
                 {starred.includes(doc.id) ? "⭐" : "☆"}
               </span>
 
-             <button
-  className="menu-btn"
-  onClick={(e) => {
-    e.stopPropagation();
-    setOpenMenu(openMenu === doc.id ? null : doc.id);
-  }}
->
-  ⋮
-</button>
+              <button
+                className="menu-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenDocMenu(openDocMenu === doc.id ? null : doc.id);
+                  setOpenFolderMenu(null);
+                }}
+              >
+                ⋮
+              </button>
 
+              {openDocMenu === doc.id && (
+                <div className="menu" onClick={(e) => e.stopPropagation()}>
+                  <div onClick={() => handleView(doc.id)}>View</div>
+                  <div
+                    onClick={() => handleDownload(doc.id, doc.title)}
+                  >
+                    Download
+                  </div>
+                  <div onClick={() => handleDelete(doc.id)}>Delete</div>
+                  <ShareBox
+  documentId={doc.id}
+  onClose={() => setOpenDocMenu(null)}
+/>
 
-          {openMenu === doc.id && (
-              <div
-                className="menu"
-                onClick={(e) => e.stopPropagation()}  // 🔥 IMPORTANT
-           >
-            <div onClick={() => handleView(doc.id)}>View</div>
-            <div onClick={() => handleDownload(doc.id, doc.title)}>Download</div>
-            <div onClick={() => handleDelete(doc.id)}>Delete</div>
-
-            <ShareBox documentId={doc.id} />
-          </div>
-          )}
-
-
+                </div>
+              )}
             </div>
 
             <div
               className="doc-icon"
-              onClick={() => navigate(`/user/documents/${doc.id}/versions`)}
+              onClick={() =>
+                navigate(`/user/documents/${doc.id}/versions`)
+              }
             >
-              {/* 🔥 THIS FIXES YOUR ICON ISSUE */}
               <img
                 src={getFileIcon(doc.title)}
                 alt="file"
@@ -383,21 +375,20 @@ const filteredDocs = [...docs]
               />
             </div>
 
-<div
-  className="doc-title"
-  onClick={() => navigate(`/user/documents/${doc.id}/versions`)}
->
-  {doc.title}
-</div>
+            <div
+              className="doc-title"
+              onClick={() =>
+                navigate(`/user/documents/${doc.id}/versions`)
+              }
+            >
+              {doc.title}
+            </div>
 
-{/* ✅ CATEGORY (only if exists) */}
-{(doc.category?.name || doc.categoryName) && (
-  <div className="doc-category">
-    {doc.category?.name || doc.categoryName}
-  </div>
-)}
-
-
+            {(doc.category?.name || doc.categoryName) && (
+              <div className="doc-category">
+                {doc.category?.name || doc.categoryName}
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -412,7 +403,9 @@ const filteredDocs = [...docs]
               onChange={(e) => setFolderName(e.target.value)}
             />
             <button onClick={handleCreateFolder}>Create</button>
-            <button onClick={() => setShowFolderModal(false)}>Cancel</button>
+            <button onClick={() => setShowFolderModal(false)}>
+              Cancel
+            </button>
           </div>
         </div>
       )}
