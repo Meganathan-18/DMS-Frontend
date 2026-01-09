@@ -181,7 +181,7 @@ const Register = () => {
               User
             </label>
 
-            <label style={styles.roleLabel}>
+            {/* <label style={styles.roleLabel}>
               <input
                 type="radio"
                 value="ADMIN"
@@ -189,7 +189,7 @@ const Register = () => {
                 onChange={(e) => setRole(e.target.value)}
               />
               Admin
-            </label>
+            </label> */}
           </div>
 
           <button type="submit" style={styles.btn}>
